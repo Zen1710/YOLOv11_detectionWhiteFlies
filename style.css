@@ -1,0 +1,84 @@
+/* Menggunakan Google Font */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+/* Animasi untuk header */
+.animate-header {
+  animation: fadeInDown 1s ease-out;
+}
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-card {
+  background-color: #ffffff;
+  border-radius: 1rem !important;
+  transition: all 0.3s ease;
+}
+
+/* Gaya untuk Navigasi Tab */
+.nav-pills .nav-link {
+  border-radius: 0.75rem;
+  font-weight: 600;
+  color: #6c757d;
+  transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #0d6efd;
+  color: white;
+  box-shadow: 0 4px 15px rgba(13, 110, 253, 0.4);
+}
+
+/* Kontainer untuk video dan kanvas */
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  min-height: 240px;
+  background-color: #000;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+video,
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+video {
+  display: block;
+}
+canvas {
+  background-color: transparent;
+}
+
+/* Kontainer Statistik */
+.stats-container {
+  opacity: 0; /* Mulai tidak terlihat untuk animasi */
+}
+
+.stat-item {
+  border-radius: 1rem !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}

@@ -1,0 +1,32 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Python / Jupyter
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Hasil training & dataset (besar, unduh ulang lewat notebook)
+*.pt
+runs/
+*_YOLO_Original_Annotations/
+*_Artifacts/
+*.zip
+
+# Rahasia
+.env
+.env.*
+!.env.example
+*.pem
+id_rsa*
+*.key
+credentials*.json
+service-account*.json
+
+# Lain-lain
+node_modules/
+*.log

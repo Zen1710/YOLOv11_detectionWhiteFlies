@@ -1,0 +1,25 @@
+description: Ultralytics YOLO11n model trained on /home/killerking/jupyterlab_project/notebooks/WhiteFlies_4/WhiteFlies_4_YOLO_Original_Annotations/data.yaml
+author: Ultralytics
+date: '2025-07-16T08:27:03.478125'
+version: 8.3.139
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 32
+task: detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: Cucumis melo_Melon
+  1: Cucumis sativus_Mentimun
+  2: Lagenaria siceraria_Labu Air
+  3: Luffa acutangula_Gambas
+  4: Momordica charantia_Pare
+  5: Whiteflies
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false
+channels: 3
