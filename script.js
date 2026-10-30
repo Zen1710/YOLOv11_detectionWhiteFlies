@@ -61,7 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     try {
       await tf.setBackend("wasm");
-      model = await tf.loadGraphModel("model.json");
+      // Pakai "./": tanpa itu TF.js memuat file .bin dari root domain, bukan dari folder halaman (404 di GitHub Pages)
+      model = await tf.loadGraphModel("./model.json");
       tf.tidy(() => {
         model.predict(tf.zeros([1, 640, 640, 3]));
       });
