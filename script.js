@@ -267,6 +267,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // Intersection over Union: luas irisan dua kotak dibagi luas gabungannya.
+  function iou(a, b) {
+    const overlapWidth =
+      Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
+    const overlapHeight =
+      Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
+    if (overlapWidth <= 0 || overlapHeight <= 0) return 0;
+    const intersection = overlapWidth * overlapHeight;
+    const union = a.width * a.height + b.width * b.height - intersection;
+    return union > 0 ? intersection / union : 0;
+  }
+
+  // Non-Maximum Suppression per kelas: ambil kotak dengan skor tertinggi, lalu
+  // buang kotak sekelas yang tumpang tindih dengannya melebihi iouThreshold.
+  function nonMaxSuppression(detections, iouThreshold) {
+    const sorted = [...detections].sort((a, b) => b.score - a.score);
+    const kept = [];
+    for (const candidate of sorted) {
+      const duplicate = kept.some(
+        (box) =>
+          box.klass === candidate.klass && iou(box, candidate) > iouThreshold
+      );
+      if (!duplicate) kept.push(candidate);
+    }
+    return kept;
+  }
+
   function processDetections(res, source, type) {
     const transposed = res.transpose([0, 2, 1]);
     const data = transposed.dataSync();
@@ -309,15 +336,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       const klass = labels[detectedClassId];
       if (!klass) continue;
 
-      detectionCount++;
-      totalConfidence += finalScore;
-
-      if (classCounts[klass] !== undefined) {
-        classCounts[klass]++;
-      } else {
-        classCounts[klass] = 1;
-      }
-
       const x1 = cx - w / 2;
       const y1 = cy - h / 2;
 
@@ -339,7 +357,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    latestDetections = detections;
+    // Model mengeluarkan banyak kotak untuk objek yang sama, jadi kotak yang
+    // tumpang tindih dibuang dulu supaya satu objek hanya dihitung sekali.
+    const kept = nonMaxSuppression(detections, 0.45);
+    for (const detection of kept) {
+      detectionCount++;
+      totalConfidence += detection.score;
+      classCounts[detection.klass] = (classCounts[detection.klass] || 0) + 1;
+    }
+
+    latestDetections = kept;
     updateStats(detectionCount, totalConfidence);
     updateObjectStats(classCounts);
 
