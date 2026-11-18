@@ -361,9 +361,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     // tumpang tindih dibuang dulu supaya satu objek hanya dihitung sekali.
     const kept = nonMaxSuppression(detections, 0.45);
     for (const detection of kept) {
+      classCounts[detection.klass] = (classCounts[detection.klass] || 0) + 1;
+      // Total, rata-rata kepercayaan, dan kategori risiko hanya untuk kutu kebul;
+      // daun tanaman tetap muncul di statistik per kelas.
+      if (detection.klass !== "Whiteflies") continue;
       detectionCount++;
       totalConfidence += detection.score;
-      classCounts[detection.klass] = (classCounts[detection.klass] || 0) + 1;
     }
 
     latestDetections = kept;
