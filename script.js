@@ -242,12 +242,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tf.engine().startScope();
     const [modelWidth, modelHeight] = model.inputs[0].shape.slice(1, 3);
+    // Letterbox: tambah padding abu-abu (114, seperti saat training) di kanan dan
+    // bawah sampai persegi, baru di-resize, supaya gambar tidak gepeng.
     const input = tf.tidy(() => {
+      const img = tf.browser.fromPixels(source);
+      const [height, width] = img.shape.slice(0, 2);
+      const size = Math.max(width, height);
+      const padded = img.pad(
+        [
+          [0, size - height],
+          [0, size - width],
+          [0, 0],
+        ],
+        114
+      );
       return tf.image
-        .resizeBilinear(tf.browser.fromPixels(source), [
-          modelWidth,
-          modelHeight,
-        ])
+        .resizeBilinear(padded, [modelHeight, modelWidth])
         .div(255.0)
         .expandDims(0);
     });
@@ -342,10 +352,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       const sourceWidth = type === "image" ? source.width : source.videoWidth;
       const sourceHeight =
         type === "image" ? source.height : source.videoHeight;
-      const x1_scaled = x1 * (sourceWidth / 640);
-      const y1_scaled = y1 * (sourceHeight / 640);
-      const w_scaled = w * (sourceWidth / 640);
-      const h_scaled = h * (sourceHeight / 640);
+      // Input di-letterbox dari persegi sisi terpanjang, jadi skalanya sama di
+      // kedua sumbu dan padding di kanan/bawah tidak menggeser koordinat.
+      const scale = Math.max(sourceWidth, sourceHeight) / 640;
+      const x1_scaled = x1 * scale;
+      const y1_scaled = y1 * scale;
+      const w_scaled = w * scale;
+      const h_scaled = h * scale;
 
       detections.push({
         x: x1_scaled,
