@@ -48,7 +48,7 @@ Model mengenali 6 kelas: 5 tanaman inang dan kutu kebulnya.
 ├── script.js                           # Load model, inferensi, gambar bounding box, statistik
 ├── style.css                           # Styling tambahan
 ├── model.json                          # Model YOLO11n format TF.js (graph model)
-├── group1-shard{1,2,3}of3.bin          # Bobot model TF.js
+├── group1-shard{1,2}of2.bin            # Bobot model TF.js (dikuantisasi ke float16, ~5 MB)
 ├── labels.json                         # Daftar nama kelas (dibaca script.js)
 ├── metadata.yaml                       # Metadata ekspor dari Ultralytics
 ├── Whiteflies jupyter NOTEBOOK.ipynb   # Notebook training (dataset → train → uji → ekspor)

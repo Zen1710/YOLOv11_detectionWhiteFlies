@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await tf.setBackend("wasm");
       // Pakai "./": tanpa itu TF.js memuat file .bin dari root domain, bukan dari folder halaman (404 di GitHub Pages)
-      // Model ~11 MB butuh belasan detik di koneksi lambat, jadi tampilkan progresnya.
+      // Model ~5,5 MB bisa butuh beberapa detik di koneksi lambat, jadi tampilkan progresnya.
       model = await tf.loadGraphModel("./model.json", {
         onProgress: (fraction) => {
           Swal.getHtmlContainer().textContent =
